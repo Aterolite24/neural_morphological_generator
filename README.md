@@ -1,4 +1,4 @@
-### Neural Morphological Generator (NMG)
+# Neural Morphological Generator (NMG)
 
 The **Neural Morphological Generator (NMG)** is a deep learning project designed to generate morphological transformations of Hindi words using sequence-to-sequence learning. By incorporating BiLSTM-based encoders and decoders with an attention mechanism, the model predicts transformed words based on linguistic attributes such as tense, gender, number, and aspect.
 
