@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neural Morphological Generator Project</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+    <script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML">
+    </script>
+    <style>
+        body {
+            font-family: "Space Mono", monospace;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+        }
+        header {
+            font-family: "Space Mono", monospace;
+            background-color: #007acc;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+        }
+        nav {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            background-color: #005fa3;
+            padding: 10px 0;
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        nav a:hover {
+            text-decoration: underline;
+        }
+        main {
+            font-family: "Space Mono", monospace;
+            margin: 20px auto;
+            padding: 20px;
+            width: 90%;
+            max-width: 1200px;
+            background-color: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        section {
+            margin-bottom: 40px;
+        }
+        h1, h2, h3 {
+            font-family: "Space Mono", monospace;
+            color: #333;
+        }
+        .content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .content img {
+            width: 45%;
+            height: auto;
+            border: 1px solid #ddd;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        .content div {
+            width: 50%;
+            padding-right: 20px;
+        }
+        .images {
+            display: flex;
+            justify-content: center; /* Center horizontally */
+            align-items: center;    /* Center vertically */
+            margin-bottom: 20px;
+        }
+        
+        .images img {
+            width: 60%;
+            height: auto;
+        }
+        
+        .images div {
+            display: none; /* Remove extra text if not needed */
+        }
+
+        .images2 {
+            display: flex;
+            justify-content: space-evenly; /* Center horizontally */
+            align-items: center;    /* Center vertically */
+            margin-bottom: 20px;
+        }
+        
+        .images2 img {
+            width: 35%;
+            height: auto;
+        }
+        
+        .images2 div {
+            display: none; /* Remove extra text if not needed */
+        }
+        
+        table {
+            font-family: "Space Mono", monospace;
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        table th, table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+        table th {
+            background-color: #f2f2f2;
+        }
+        footer {
+            text-align: center;
+            margin-top: 40px;
+        }
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 15px;
+        }
+        .social-icons img {
+            width: 24px;
+            height: 24px;
+        }
+        p {
+            font-family: "Space Mono", monospace;
+        }
+        /* Process Flow Styles */
+        .process-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .process-box {
+            width: 80%;
+            background-color: #f4f4f4;
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            position: relative;
+        }
+        .process-box::after {
+            content: "";
+            position: absolute;
+            bottom: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 20px;
+            height: 20px;
+            background: url('arrow_down.svg') no-repeat center center;
+            background-size: contain;
+        }
+        .process-box:last-child::after {
+            content: "";
+        }
+        footer {
+            text-align: center;
+            padding: 1rem 0;
+            background-color: #333;
+            color: white;
+            margin-top: 2rem;
+        }
+        footer h3 {
+            color: white;
+        }
+        footer a {
+            color: #4CAF50;
+            text-decoration: none;
+            margin: 0 0.5rem;
+        }
+        footer img {
+            width: 30px;
+            vertical-align: middle;
+        }
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .content {
+                flex-direction: column;
+            }
+            .content img, .content div {
+                width: 100%;
+                padding: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1 style="color:white">Neural Morphological Generator Project</h1>
+        <p>A Hindi Morphological Sequence-to-Sequence Learning Approach</p>
+    </header>
+    <nav>
+        <a href="#introduction">Introduction</a>
+        <a href="#data-processing">Data Processing</a>
+        <a href="#model-architecture">Model Architecture</a>
+        <a href="#generated-output">Generated Output</a>
+        <a href="#metrics">Metrics</a>
+        <a href="#conclusion">Conclusion</a>
+    </nav>
+    <main>
+        <section id="introduction">
+            <h2>Introduction</h2>
+            <!-- <div class="content"> -->
+                <div>
+                    <p>
+                        Neural Morphological Generator (NMG) is a deep learning model designed to transform base words into their morphological forms, focusing on the Hindi language. 
+                        It predicts the transformed word based on linguistic attributes like tense, gender, number, and aspect.
+                    </p>
+                    <p>
+                        The dataset consists of base words, their transformed forms, and features such as POS (Part of Speech), person, number, tense, aspect, and gender. 
+                        These features were one-hot encoded and used as additional inputs to the model.
+                    </p>
+                </div>
+                <!-- <img src="dataset_structure.png" alt="Dataset Overview"> -->
+            <!-- </div> -->
+        </section>
+        <section id="data-processing">
+            <div>
+            <h2>Data Processing Workflow</h2>
+            <p>These are various features extracted from dataset:</p>
+            <p><strong>POS:</strong> Count unique parts of speech.</p>
+            <p><strong>Person:</strong> Typically 1, 2, 3</p>
+            <p><strong>Number:</strong> Singular, Plural (SG, PL).</p>
+            <p><strong>Tense:</strong> Present, Past, Future, etc.</p>
+            <p><strong>Aspect:</strong> Imperfective, Perfective, etc.</p>
+            <p><strong>Gender:</strong> Masculine, Feminine, Neuter, Unknown.</p>
+            <p>
+                The dataset used for training the NMG model focuses on Hindi verb forms. Each verb is provided in its <strong>Base Form</strong> and <strong>Inflected Form</strong>, alongside morphological features such as tense, aspect, number, and gender. Below is the step-by-step data preprocessing workflow:
+            </p>
+            <div class="process-container">
+                <div class="process-box"><strong>Step 1:</strong> Remove Empty Lines: Empty lines are irrelevant and would add noise to the dataset, leading to incorrect model training.</div>
+                <div class="process-box"><strong>Step 2:</strong> Validate and Parse: Each line of the dataset must be parsed into three parts: base word, transformed word, and attributes.</div>
+                <div class="process-box"><strong>Step 3:</strong> Structure the Data: Create a Pandas DataFrame to organize</div>
+                <div class="process-box"><strong>Step 4:</strong> Split Morphological Features: separated by semicolons, such as Part of Speech (POS), Person, Number, Tense, Aspect, and Gender.</div>
+                <div class="process-box"><strong>Step 5:</strong> Handle Missing Values</div>
+                <div class="process-box"><strong>Step 6:</strong> Save Processed Data</div>
+            </div>
+        </section>
+        <section id="model-architecture">
+            <h2>Model Architecture - Seq2Seq Model</h2>
+            <p>
+                Seq2Seq models are designed for tasks that require mapping one sequence (input) to another (output), such as machine translation, text summarization, or your morphological generator project.
+                It consists of:
+                <ul>
+                    <li><strong>Encoder: </strong> the input sequence into a context vector (a fixed-length representation).</li>
+                    <li><strong>Decoder: </strong> this context vector into the output sequence.</li>
+                    <li><strong>Attention: </strong> the model by dynamically focusing on relevant parts of the input sequence during decoding.</li>
+                </ul>
+            </p>
+            <!-- <div class="content"> -->
+                <div>
+                    <h3>BiLSTM Encoder</h3>
+                    <strong>Why BiLSTM?</strong>
+                    <p>BiLSTM is considered an improvement over the standard unidirectional LSTM for several reasons:</p>
+                    <ul>
+                        <li><strong>Captures Full Context:</strong> BiLSTM processes data in both directions, enabling the model to learn context from both past and future time steps.</li>
+                        <li><strong>Improved Performance:</strong> By considering both forward and backward context, BiLSTMs generally outperform unidirectional LSTMs in sequence-based tasks like machine translation and speech recognition.</li>
+                        <li><strong>Flexible in Sequence Processing:</strong> Useful for tasks where the output depends on both past and future elements of the sequence.</li>
+                    </ul>
+
+                    <strong>How BiLSTM works?</strong>
+                    <p>In BiLSTM, two LSTMs are used: one processes the sequence from left to right, while the other processes it from right to left. The output from both LSTMs is combined.</p>
+
+                    <strong>Mathematical Equations</strong>
+                    <p>For both forward and backward LSTMs, we use the following standard equations:</p>
+
+                    Forget Gate (\( f_t \)):
+                    <p>
+                        \[
+                        f_t = \sigma(W_f \cdot [h_{t-1}, x_t] + b_f)
+                        \]
+                    </p>
+
+                    Input Gate (\( i_t \)):
+                    <p>
+                        \[
+                        i_t = \sigma(W_i \cdot [h_{t-1}, x_t] + b_i)
+                        \]
+                    </p>
+
+                    Cell Candidate (\( \tilde{C}_t \)):
+                    <p>
+                        \[
+                        \tilde{C}_t = \tanh(W_C \cdot [h_{t-1}, x_t] + b_C)
+                        \]
+                    </p>
+
+                    Cell State (\( C_t \)):
+                    <p>
+                        \[
+                        C_t = f_t * C_{t-1} + i_t * \tilde{C}_t
+                        \]
+                    </p>
+
+                    Output Gate (\( o_t \)):
+                    <p>
+                        \[
+                        o_t = \sigma(W_o \cdot [h_{t-1}, x_t] + b_o)
+                        \]
+                    </p>
+
+                    Hidden State (\( h_t \)):
+                    <p>
+                        \[
+                        h_t = o_t * \tanh(C_t)
+                        \]
+                    </p>
+
+                    <h4>BiLSTM Architecture</h4>
+                    <p>The BiLSTM architecture involves two LSTM layers, one for the forward pass and another for the backward pass. The outputs of both layers are combined (usually concatenated).</p>
+                    <ul>
+                        <li><strong>Forward LSTM:</strong> Processes the sequence in a left-to-right manner.</li>
+                        <li><strong>Backward LSTM:</strong> Processes the sequence in a right-to-left manner.</li>
+                        <li><strong>Final Output:</strong> The outputs from both LSTM layers are concatenated to produce a richer representation for each time step.</li>
+                    </ul>
+                   
+                <!-- </div> -->
+                 <div class="images">
+                    <img src="img/Model_architecture.png" alt="Model Architecture">
+                 </div>
+            </div>
+            <!-- <div class="content"> -->
+                <div>
+                    
+                    <strong>Attention Mechanism and Decoder</strong>
+
+                    <strong>Attention Mechanism</strong>
+                    <p>The attention mechanism enables the decoder to focus on the most relevant parts of the input sequence while generating each element of the output sequence.</p>
+                    <p>Instead of relying solely on the last hidden state of the encoder, attention computes a weighted combination of all encoder outputs.</p>
+
+                    <strong>Mathematical Explanation</strong>
+                    <p>The attention mechanism can be summarized by the following steps:</p>
+
+                    Compute Alignment Scores:
+                    <p>The alignment score measures how well the decoder's current hidden state (\( h_t^{dec} \)) aligns with each encoder output (\( h_i^{enc} \)).
+                        \[
+                        score(h_t^{dec}, h_i^{enc}) = h_t^{dec} \cdot h_i^{enc}
+                        \]
+                        This can be generalized to:
+                        \[
+                        score(h_t^{dec}, h_i^{enc}) = \text{tanh}(W_a [h_t^{dec}; h_i^{enc}] + b_a)
+                        \]
+                    </p>
+
+                    Compute Attention Weights:
+                    <p>The attention weights (\( \alpha_{t,i} \)) are obtained by normalizing the scores using a softmax function:
+                        \[
+                        \alpha_{t,i} = \frac{\exp(score(h_t^{dec}, h_i^{enc}))}{\sum_{j} \exp(score(h_t^{dec}, h_j^{enc}))}
+                        \]
+                    </p>
+
+                    Compute the Context Vector:
+                    <p>The context vector (\( c_t \)) is computed as a weighted sum of the encoder's outputs:
+                        \[
+                        c_t = \sum_{i} \alpha_{t,i} h_i^{enc}
+                        \]
+                    </p>
+
+                    Combine Context Vector with Decoder State:
+                    <p>The context vector is concatenated with the decoder's current hidden state to influence the next prediction.</p>
+
+                    <strong>Decoder</strong>
+                    <p>The decoder generates the target sequence one token at a time. It uses its previous output, the hidden state, and the context vector from the attention mechanism.</p>
+
+                    <p><strong>Mathematical Explanation</strong></p>
+
+                    Input Embedding:
+                    <p>The input token (\( y_{t-1} \)) is embedded using an embedding layer:
+                        \[
+                        e_{t-1} = \text{Embedding}(y_{t-1})
+                        \]
+                    </p>
+
+                    LSTM Update:
+                    <p>The decoder's LSTM processes the embedding and previous hidden states (\( h_{t-1}^{dec}, C_{t-1}^{dec} \)):
+                        \[
+                        h_t^{dec}, C_t^{dec} = \text{LSTM}(e_{t-1}, [h_{t-1}^{dec}, C_{t-1}^{dec}])
+                        \]
+                    </p>
+
+                    Final Prediction:
+                    <p>The decoder combines the current hidden state (\( h_t^{dec} \)) and the context vector (\( c_t \)) to predict the next token:
+                        \[
+                        p(y_t | y_{t-1}, x) = \text{Softmax}(W_o [h_t^{dec}; c_t] + b_o)
+                        \]
+                    </p>
+
+                    <strong>Architecture Overview</strong>
+                    <p>The overall decoder with attention mechanism integrates the following steps:</p>
+                    <ul>
+                        <li>Generate embeddings for the previous target token.</li>
+                        <li>Update the hidden state using the LSTM cell.</li>
+                        <li>Calculate attention weights and the context vector.</li>
+                        <li>Combine the context vector with the decoder's hidden state to produce the output probability distribution.</li>
+                    </ul>
+
+                    <strong>Why Attention Mechanism is Useful</strong>
+                    <p>The attention mechanism provides several benefits:</p>
+                    <ul>
+                        <li><strong>Dynamic Focus:</strong> Allows the model to dynamically focus on different parts of the input sequence for each output token.</li>
+                        <li><strong>Improved Long-Distance Dependencies:</strong> Helps mitigate the limitations of traditional RNNs by focusing on the relevant parts of long input sequences.</li>
+                        <li><strong>Better Interpretability:</strong> Attention weights can be visualized to understand which input tokens the model considers important for generating each output token.</li>
+                    </ul>
+            </div>
+        </section>
+
+        <section id="generated-output">
+            <h2>Generated Output</h2>
+            <!-- <div class="content"> -->
+                <div>
+                    <p>The table below illustrates some of the model's outputs for given inputs and features:</p>
+                    <table>
+                        <tr>
+                            <th>Base Word</th>
+                            <th>Features</th>
+                            <th>Transformed Word</th>
+                            <th>Predicted Word</th>
+                        </tr>
+                        <tr>
+                            <td>खाना</td>
+                            <td>POS: Verb, Tense: Past</td>
+                            <td>खा लिया</td>
+                            <td>खा लिया</td>
+                        </tr>
+                        <tr>
+                            <td>बच्चा</td>
+                            <td>POS: Noun, Gender: Male, Number: Plural</td>
+                            <td>बच्चे</td>
+                            <td>बच्चे</td>
+                        </tr>
+                    </table>
+                </div>
+                
+                <!-- <img src="attention_visualization.png" alt="Attention Visualization">
+            </div> -->
+        </section>
+
+        <section id="metrics">
+            <h2>Metrics and Performance</h2>
+            <p>
+                The training accuracy graph shows the model's learning process: 
+                <ul>
+                    <li><strong>Initial Phase:</strong> Accuracy starts low as the model begins learning patterns.</li>
+                    <li><strong>Learning Phase</strong>: Accuracy steadily improves as the **BiLSTM** encoder and attention mechanism enhance context understanding.</li>
+                    <li><strong>Plateau Phase</strong>: Accuracy stabilizes, indicating the model has effectively learned the training data.</li>
+                </ul>
+                
+            </p>
+
+            <div class="images2">
+                <img src="img/training_loss_plot.png" alt="Accuracy Plot">
+                <img src="img/bleu_score_distribution.png" alt="BLEU Score Distribution">
+             </div>
+
+            <div class="content">
+                <div>
+                    <p>The BLEU score (Bilingual Evaluation Understudy) is a metric used to evaluate the quality of text generated by a machine translation or sequence-to-sequence model. </p>
+                    <p>N-gram Matching -> Brevity Penalty -> Score Range [0.-1.]</p>
+                    <p>Our Neural Morphological Generator (NMG) demonstrates exceptional performance in transforming Hindi words accurately. The BLEU score of 0.6911 reflects strong alignment between the predicted and actual sequences, indicating the model's ability to produce meaningful outputs.</p>
+                    <p>The model achieved the following metrics:</p>
+                    <table>
+                        <tr><th>Metric</th><th>Value</th></tr>
+                        <tr><td>BLEU Score</td><td>0.6911</td></tr>
+                        <tr><td>Accuracy</td><td>97.19%</td></tr>
+                        <tr><td>Precision</td><td>97.87%</td></tr>
+                        <tr><td>Recall</td><td>97.19%</td></tr>
+                        <tr><td>F1-Score</td><td>97.51%</td></tr>
+                    </table>
+                </div>
+                <img src="img/confusion_matrix.png" alt="Confusion Matrix">
+            </div>
+        </section>
+        <section id="conclusion">
+            <h2>Conclusion</h2>
+            <p>
+                The Neural Morphological Generator successfully learned to generate accurate morphological transformations in Hindi.
+                The combination of BiLSTM, attention mechanisms, and feature-based inputs led to a robust and efficient model.
+            </p>
+        </section>
+        <!-- <footer>
+            <p>Developed by Achal Gawande</p>
+            <div class="social-icons">
+                <a href="https://github.com/Aterolite24"><img src="github_logo.png" alt="GitHub"></a>
+                <a href="https://www.linkedin.com/in/achal-gawande-33615b250/"><img src="linkedin_logo.png" alt="LinkedIn"></a>
+            </div>
+        </footer> -->
+    </main>
+    <footer>
+        <h3><strong>Project by:</strong></h3>
+        <p>
+            Achal Gawande, CSE (III)
+        </p>
+        <p>
+            Indian Institute of Technology (Banaras Hindu University), Varanasi
+        </p>
+        <p>
+            <img src="img/email.png" alt="Email"> achal.gawande.cse22@itbhu.ac.in
+            <img src="img/github.png" alt="GitHub"> <a href="https://github.com/Aterolite24/neural_morphological_generator">GitHub</a>
+            <img src="img/linkedin.png" alt="LinkedIn"> <a href="https://www.linkedin.com/in/achal-gawande-33615b250/">LinkedIn</a>
+        </p>
+    </footer>
+</body>
+</html>
